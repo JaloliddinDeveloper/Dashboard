@@ -2,7 +2,7 @@
 
 Ushbu loyiha O‘zbekiston aholisi haqida **2000–2025 yillar oralig‘idagi demografik ma’lumotlarni** vizual tarzda ko‘rsatadi. Ma’lumotlar rasmiy **O‘zbekiston Davlat Statistika Qo‘mitasi**, **BMT (UN Data)** va boshqa manbalardan olingan.
 
-![Sector Chart](Pictures/photo_4_2025-09-04_12-52-07.jpg)
+![Sector Chart](Pictures/photo_6_2025-09-04_12-52-07.jpg)
 # 🏭 O‘zbekistonda Iqtisodiy Sektorlar (2000–2025)
 
 Ushbu bo‘limda **2000–2025 yillar oralig‘ida O‘zbekiston yalpi ichki mahsulotida (YaIM) sektorlarning ulushi** (foizlarda) ko‘rsatiladi:  
