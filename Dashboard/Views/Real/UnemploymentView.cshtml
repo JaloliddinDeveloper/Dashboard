@@ -1,0 +1,84 @@
+﻿@{
+    ViewData["Title"] = "Unemployment Chart";
+}
+
+<h2 style="text-align:center; margin-bottom:20px;">Ishsizlik darajasi (yillar bo‘yicha)</h2>
+
+<div style="width: 100%; max-width: 1100px; margin: auto;">
+    <canvas id="unemploymentChart"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    async function loadChart() {
+        const response = await fetch('/Real/UnemploymentData');
+        const data = await response.json();
+
+        const labels = data.map(d => d.year);
+        const rates = data.map(d => d.rate);
+
+        const ctx = document.getElementById('unemploymentChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Ishsizlik darajasi (%)',
+                    data: rates,
+                    fill: true,
+                    backgroundColor: 'rgba(75,192,192,0.2)',
+                    borderColor: 'rgba(75,192,192,1)',
+                    pointBackgroundColor: rates.map(r => r >= 8 ? 'red' : 'green'), // yuqori bo‘lsa qizil
+                    tension: 0.4, 
+                    borderWidth: 3
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Yillik ishsizlik darajasi',
+                        font: {
+                            size: 20,
+                            weight: 'bold'
+                        },
+                        padding: {
+                            top: 10,
+                            bottom: 30
+                        }
+                    },
+                    legend: {
+                        labels: {
+                            font: { size: 14 }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.parsed.y + " %";
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: "Foiz (%)"
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: "Yil"
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    loadChart();
+</script>

@@ -1,0 +1,107 @@
+﻿@{
+    ViewData["Title"] = "Inflation Chart";
+}
+
+<h2 style="text-align:center; margin:20px 0;">📈 O‘zbekiston Inflyatsiya Darajasi (2000–2025)</h2>
+
+<div style="width:100%; max-width:1000px; margin:auto;">
+    <canvas id="inflationChart"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    async function loadInflationChart() {
+        const response = await fetch('/Real/InflationData');
+        const data = await response.json();
+
+        if (data.length === 0) {
+            alert("Inflyatsiya ma'lumotlari yo‘q!");
+            return;
+        }
+
+        const labels = data.map(d => d.year);   // endi bu faqat raqam
+        const rates = data.map(d => d.rate);
+
+        const ctx = document.getElementById('inflationChart').getContext('2d');
+
+        // Gradient fon (zamonaviy effekt)
+        const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+        gradient.addColorStop(0, 'rgba(255, 99, 132, 0.6)');
+        gradient.addColorStop(1, 'rgba(255, 99, 132, 0)');
+
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Inflyatsiya (%)',
+                    data: rates,
+                    fill: true,
+                    backgroundColor: gradient,
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 2,
+                    tension: 0.4,
+                    pointBackgroundColor: '#fff',
+                    pointBorderColor: 'rgba(255, 99, 132, 1)',
+                    pointRadius: 4,
+                    pointHoverRadius: 7,
+                    pointHoverBackgroundColor: 'yellow'
+                }]
+            },
+            options: {
+                responsive: true,
+                animation: {
+                    duration: 2000,
+                    easing: 'easeOutQuart'
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        labels: {
+                            font: {
+                                size: 14,
+                                family: 'Segoe UI, sans-serif'
+                            }
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0,0,0,0.7)',
+                        titleFont: { size: 14, weight: 'bold' },
+                        bodyFont: { size: 13 },
+                        callbacks: {
+                            label: function(context) {
+                                return context.parsed.y + " %";
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        title: {
+                            display: true,
+                            text: "Foiz (%)",
+                            font: { size: 14 }
+                        },
+                        grid: {
+                            color: 'rgba(200,200,200,0.2)'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: "Yil",
+                            font: { size: 14 }
+                        },
+                        grid: {
+                            color: 'rgba(200,200,200,0.1)'
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    loadInflationChart();
+</script>

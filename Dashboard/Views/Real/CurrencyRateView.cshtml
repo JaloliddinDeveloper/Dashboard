@@ -1,0 +1,101 @@
+﻿@{
+    ViewData["Title"] = "Currency Exchange Rate Chart";
+}
+
+<h2 class="text-center my-4">USD/EUR to UZS Exchange Rate (2000–2025)</h2>
+
+<div style="width: 100%; max-width: 900px; margin: auto;">
+    <canvas id="currencyChart"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    async function loadCurrencyChart() {
+        const response = await fetch('/Real/CurrencyRateData');
+        const data = await response.json();
+
+        const labels = data.map(x => new Date(x.year).getFullYear());
+        const usdRates = data.map(x => x.usdToUzs);
+        const eurRates = data.map(x => x.eurToUzs);
+
+        const ctx = document.getElementById('currencyChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'USD to UZS',
+                        data: usdRates,
+                        borderColor: '#4e73df',
+                        backgroundColor: 'rgba(78, 115, 223, 0.1)',
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 4,
+                        pointBackgroundColor: '#4e73df'
+                    },
+                    {
+                        label: 'EUR to UZS',
+                        data: eurRates,
+                        borderColor: '#e74a3b',
+                        backgroundColor: 'rgba(231, 74, 59, 0.1)',
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 4,
+                        pointBackgroundColor: '#e74a3b'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                interaction: {
+                    mode: 'index',
+                    intersect: false
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Uzbekistan Currency Rates (USD & EUR → UZS)',
+                        font: { size: 20, weight: 'bold' }
+                    },
+                    tooltip: {
+                        enabled: true,
+                        mode: 'nearest',
+                        intersect: false,
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ': ' + context.formattedValue + " UZS";
+                            }
+                        }
+                    },
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            font: { size: 14 }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        title: {
+                            display: true,
+                            text: 'Exchange Rate (UZS)',
+                            font: { size: 14 }
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Year',
+                            font: { size: 14 }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    loadCurrencyChart();
+</script>

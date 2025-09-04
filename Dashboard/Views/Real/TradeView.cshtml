@@ -1,0 +1,107 @@
+﻿@{
+    ViewData["Title"] = "Trade Chart";
+}
+
+<h2 style="text-align:center; margin:20px 0;">O‘zbekiston tashqi savdosi (Eksport & Import)</h2>
+
+<div style="width: 100%; max-width: 1000px; margin: auto;">
+    <canvas id="tradeChart"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    async function loadChart() {
+        const response = await fetch('/Real/TradeData');
+        const trades = await response.json();
+
+        if (trades.length === 0) {
+            alert("Ma'lumotlar mavjud emas!");
+            return;
+        }
+
+        const labels = trades.map(t => t.year);
+        const exports = trades.map(t => t.export);
+        const imports = trades.map(t => t.import);
+
+        const ctx = document.getElementById('tradeChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Eksport',
+                        data: exports,
+                        borderColor: 'rgba(34,197,94,1)', // yashil
+                        backgroundColor: 'rgba(34,197,94,0.2)',
+                        tension: 0.4,
+                        fill: true,
+                        pointStyle: 'circle',
+                        pointRadius: 5,
+                        pointHoverRadius: 8
+                    },
+                    {
+                        label: 'Import',
+                        data: imports,
+                        borderColor: 'rgba(239,68,68,1)', // qizil
+                        backgroundColor: 'rgba(239,68,68,0.2)',
+                        tension: 0.4,
+                        fill: true,
+                        pointStyle: 'rectRot',
+                        pointRadius: 5,
+                        pointHoverRadius: 8
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            font: {
+                                size: 14,
+                                weight: 'bold'
+                            }
+                        }
+                    },
+                    title: {
+                        display: true,
+                        text: '2000-2025 O‘zbekiston tashqi savdo balansi',
+                        font: {
+                            size: 18,
+                            weight: 'bold'
+                        }
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false
+                    }
+                },
+                interaction: {
+                    mode: 'nearest',
+                    axis: 'x',
+                    intersect: false
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'mlrd. USD'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Yillar'
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    loadChart();
+</script>
