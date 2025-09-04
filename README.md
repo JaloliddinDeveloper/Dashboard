@@ -52,7 +52,7 @@ Ma’lumotlar SQL Server bazasida saqlanadi va **ASP.NET Core MVC + Chart.js** y
 ## 📊 Diagramma
 Quyida **ishsizlik darajasi trendi**ni ko‘rishingiz mumkin:  
 ![Ishsizlik Darajasi Chart](/Pictures/photo_1_2025-09-04_12-52-07.jpg)
-##"**Boshqa Diagrammalar rasmlari**"
+## Boshqa Diagrammalar rasmlari
 ![Chart](Pictures/photo_7_2025-09-04_12-52-07.jpg)
 ![Chart](Pictures/photo_8_2025-09-04_12-52-07.jpg)
 ![Chart](Pictures/photo_9_2025-09-04_12-52-07.jpg)
