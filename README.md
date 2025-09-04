@@ -1,3 +1,8 @@
+# 📊 O‘zbekiston Demografiyasi (2000–2025)
+
+Ushbu loyiha O‘zbekiston aholisi haqida **2000–2025 yillar oralig‘idagi demografik ma’lumotlarni** vizual tarzda ko‘rsatadi. Ma’lumotlar rasmiy **O‘zbekiston Davlat Statistika Qo‘mitasi**, **BMT (UN Data)** va boshqa manbalardan olingan.
+
+![Sector Chart](Pictures/photo_4_2025-09-04_12-52-07.jpg)
 # 🏭 O‘zbekistonda Iqtisodiy Sektorlar (2000–2025)
 
 Ushbu bo‘limda **2000–2025 yillar oralig‘ida O‘zbekiston yalpi ichki mahsulotida (YaIM) sektorlarning ulushi** (foizlarda) ko‘rsatiladi:  
@@ -25,6 +30,17 @@ Ma’lumotlar **SQL Server** bazasida saqlanadi va **ASP.NET Core MVC + Chart.js
 Quyida **eksport va import hajmining yillik dinamikasi**ni ko‘rishingiz mumkin:  
 ![Trade Chart](Pictures/photo_2_2025-09-04_12-52-07.jpg)
 
+# 📈 O‘zbekistonda Inflatsiya Darajasi (2000–2025)
+
+Ushbu bo‘limda **2000–2025 yillar oralig‘ida O‘zbekiston inflyatsiya darajasi** (yillik o‘sish foizida) ko‘rsatiladi.  
+Ma’lumotlar **SQL Server** bazasida saqlanadi va **ASP.NET Core MVC + Chart.js** orqali vizualizatsiya qilinadi.  
+
+---
+
+## 📊 Diagramma
+Quyida **inflyatsiya darajasi yillik dinamikasi**ni ko‘rishingiz mumkin:  
+
+![Inflation Chart](Pictures/photo_4_2025-09-04_12-52-07.jpg)
 
 # 📉 Ishsizlik Darajasi (2000–2025)
 
