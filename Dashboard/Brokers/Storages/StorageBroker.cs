@@ -21,7 +21,7 @@ namespace Dashboard.Brokers.Storages
 
             optionsBuilder.UseSqlServer(connection);
         }
-        public DbSet<Student> Students { get; set; }
+
         public DbSet<BudgetData> BudgetDatas { get; set;}
         public DbSet<CurrencyRateData> CurrencyRateDatas { get; set;}
         public DbSet<DemographyData> DemographyDatas { get; set;}
