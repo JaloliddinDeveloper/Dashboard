@@ -1,0 +1,46 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<div class="chart-links">
+    <a asp-action="ChartGpa" class="chart-btn gpa">📘 GPA Chart</a>
+    <a asp-action="ChartBalance" class="chart-btn balance">💰 Balance Chart</a>
+    <a asp-action="ChartActiveInactive" class="chart-btn active">✅ Active/Inactive</a>
+    <a asp-action="GpaYear" class="chart-btn active">✅ Active/Inactive</a>
+</div>
+
+<style>
+    .chart-links {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-top: 50px;
+        flex-wrap: wrap;
+    }
+
+    .chart-btn {
+        text-decoration: none;
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        color: white;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+        .chart-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
+
+        .chart-btn.gpa {
+            background: linear-gradient(135deg, #4e73df, #224abe);
+        }
+
+        .chart-btn.balance {
+            background: linear-gradient(135deg, #1cc88a, #13855c);
+        }
+
+        .chart-btn.active {
+            background: linear-gradient(135deg, #e74a3b, #b21f2d);
+        }
+</style>

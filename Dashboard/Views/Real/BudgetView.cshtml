@@ -1,0 +1,97 @@
+﻿@{
+    ViewData["Title"] = "Budget Allocation Chart";
+}
+
+<h2 class="text-center">Davlat Byudjeti Taʼqsimoti (2000–2025)</h2>
+
+<div style="width:100%; max-width:1000px; margin:auto;">
+    <canvas id="budgetChart"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    async function loadBudgetChart() {
+        const response = await fetch('/Real/BudgetData');
+        const data = await response.json();
+
+        if (data.length === 0) {
+            alert("Byudjet ma'lumotlari yo‘q!");
+            return;
+        }
+
+        const labels = data.map(d => d.year);
+
+        const datasets = [
+            {
+                label: 'Taʼlim',
+                data: data.map(d => d.education),
+                backgroundColor: 'rgba(54, 162, 235, 0.8)'
+            },
+            {
+                label: 'Sogʻliqni saqlash',
+                data: data.map(d => d.healthcare),
+                backgroundColor: 'rgba(75, 192, 192, 0.8)'
+            },
+            {
+                label: 'Mudofaa',
+                data: data.map(d => d.defense),
+                backgroundColor: 'rgba(255, 99, 132, 0.8)'
+            },
+            {
+                label: 'Infratuzilma',
+                data: data.map(d => d.infrastructure),
+                backgroundColor: 'rgba(255, 206, 86, 0.8)'
+            },
+            {
+                label: 'Boshqa',
+                data: data.map(d => d.other),
+                backgroundColor: 'rgba(153, 102, 255, 0.8)'
+            }
+        ];
+
+        const ctx = document.getElementById('budgetChart').getContext('2d');
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: { labels, datasets },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Davlat Byudjeti Yo‘nalishlari',
+                        font: { size: 18 }
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ": " + context.parsed.y.toLocaleString() + " mlrd soʻm";
+                            }
+                        }
+                    },
+                    legend: {
+                        position: 'bottom',
+                        labels: { font: { size: 13 } }
+                    }
+                },
+                interaction: { mode: 'nearest', axis: 'x', intersect: false },
+                scales: {
+                    x: {
+                        stacked: true,
+                        title: { display: true, text: "Yil" }
+                    },
+                    y: {
+                        stacked: true,
+                        title: { display: true, text: "Mablagʻ (mlrd soʻm)" },
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+
+    loadBudgetChart();
+</script>

@@ -1,0 +1,78 @@
+﻿@{
+    ViewData["Title"] = "Students Chart";
+}
+
+<h2>Students GPA Chart</h2>
+
+<div style="width: 100%; max-width: 800px; margin: auto;">
+    <canvas id="studentsChart"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    async function loadChart() {
+        const response = await fetch('/Student/Chart');
+        const students = await response.json();
+
+        if (students.length === 0) {
+            alert("Studentlar yo‘q!");
+            return;
+        }
+
+        const labels = students.map(s => s.fullName);
+        const gpas = students.map(s => s.gpa);
+
+        // GPA bo‘yicha rang tanlash
+        const backgroundColors = gpas.map(gpa => gpa >= 2.8 ? 'rgba(0, 200, 0, 0.6)' : 'rgba(200, 0, 0, 0.6)');
+        const borderColors = gpas.map(gpa => gpa >= 2.8 ? 'rgba(0, 200, 0, 1)' : 'rgba(200, 0, 0, 1)');
+
+        const ctx = document.getElementById('studentsChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Student GPA',
+                    data: gpas,
+                    backgroundColor: backgroundColors,
+                    borderColor: borderColors,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 5
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: {
+                            generateLabels: function(chart) {
+                                return [
+                                    {
+                                        text: "GPA ≥ 2.8 (Yashil)",
+                                        fillStyle: "rgba(0, 200, 0, 0.6)",
+                                        strokeStyle: "rgba(0, 200, 0, 1)",
+                                        lineWidth: 1
+                                    },
+                                    {
+                                        text: "GPA < 2.8 (Qizil)",
+                                        fillStyle: "rgba(200, 0, 0, 0.6)",
+                                        strokeStyle: "rgba(200, 0, 0, 1)",
+                                        lineWidth: 1
+                                    }
+                                ];
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    loadChart();
+</script>

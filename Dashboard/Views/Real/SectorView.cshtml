@@ -1,0 +1,103 @@
+﻿@{
+    ViewData["Title"] = "Sector Structure Chart";
+}
+
+<h2 style="text-align:center; margin:20px 0;">O‘zbekiston iqtisodiy sektorlari (2000–2025)</h2>
+
+<div style="width: 100%; max-width: 1000px; margin: auto;">
+    <canvas id="sectorChart"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    async function loadChart() {
+        const response = await fetch('/Real/SectorData');
+        const sectors = await response.json();
+
+        if (sectors.length === 0) {
+            alert("Ma'lumotlar mavjud emas!");
+            return;
+        }
+
+        const labels = sectors.map(s => s.year);
+        const agriculture = sectors.map(s => s.agriculture);
+        const industry = sectors.map(s => s.industry);
+        const services = sectors.map(s => s.services);
+
+        const ctx = document.getElementById('sectorChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Qishloq xo‘jaligi',
+                        data: agriculture,
+                        borderColor: 'rgba(34,197,94,1)', // yashil
+                        backgroundColor: 'rgba(34,197,94,0.3)',
+                        fill: true,
+                        tension: 0.4
+                    },
+                    {
+                        label: 'Sanoat',
+                        data: industry,
+                        borderColor: 'rgba(59,130,246,1)', // ko‘k
+                        backgroundColor: 'rgba(59,130,246,0.3)',
+                        fill: true,
+                        tension: 0.4
+                    },
+                    {
+                        label: 'Xizmatlar',
+                        data: services,
+                        borderColor: 'rgba(249,115,22,1)', // sariq-to‘q
+                        backgroundColor: 'rgba(249,115,22,0.3)',
+                        fill: true,
+                        tension: 0.4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: { font: { size: 14, weight: 'bold' } }
+                    },
+                    title: {
+                        display: true,
+                        text: 'Iqtisodiyot sektorlari ulushi bo‘yicha trend',
+                        font: { size: 18, weight: 'bold' }
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false
+                    }
+                },
+                interaction: {
+                    mode: 'nearest',
+                    axis: 'x',
+                    intersect: false
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        stacked: true,
+                        title: {
+                            display: true,
+                            text: '% (YAIMdan ulushi)'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Yillar'
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    loadChart();
+</script>

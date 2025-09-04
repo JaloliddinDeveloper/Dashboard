@@ -1,0 +1,80 @@
+﻿@{
+    ViewData["Title"] = "Gender Demography Chart";
+}
+
+<h2>Aholi soni – Erkaklar va Ayollar (2000–2025)</h2>
+
+<div style="width:100%; max-width:950px; margin:auto;">
+    <canvas id="genderChart"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    async function loadGenderChart() {
+        const response = await fetch('/Real/DemographyGenderData');
+        const data = await response.json();
+
+        if (data.length === 0) {
+            alert("Demografiya ma'lumotlari yo‘q!");
+            return;
+        }
+
+        const labels = data.map(d => d.year);
+        const males = data.map(d => d.male);
+        const females = data.map(d => d.female);
+
+        const ctx = document.getElementById('genderChart').getContext('2d');
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Erkaklar',
+                        data: males,
+                        backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Ayollar',
+                        data: females,
+                        backgroundColor: 'rgba(255, 99, 132, 0.7)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: "Aholi soni gender bo‘yicha taqsimoti",
+                        font: { size: 18 }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ": " + context.formattedValue + " mln kishi";
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: { display: true, text: "Aholi soni (mln)" }
+                    },
+                    x: {
+                        title: { display: true, text: "Yillar" }
+                    }
+                }
+            }
+        });
+    }
+
+    loadGenderChart();
+</script>

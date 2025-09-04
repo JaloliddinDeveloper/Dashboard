@@ -1,0 +1,173 @@
+﻿@{
+    ViewData["Title"] = "GDP Chart";
+}
+
+<h2 style="text-align:center; margin:18px 0;">YaIM (GDP) va yilma-yil o‘sish (%) — 2000–2025</h2>
+
+<div style="width:100%; max-width:1100px; margin:18px auto 40px; background:transparent; padding:12px; border-radius:10px;">
+    <canvas id="gdpChart" height="400"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    (async function() {
+        const res = await fetch('/Real/GdpData');
+        const raw = await res.json();
+        if(!raw || raw.length === 0) {
+            document.getElementById('gdpChart').parentElement.innerHTML = '<p style="text-align:center;color:#777">Maʼlumot mavjud emas.</p>';
+            return;
+        }
+
+        // serverdan olganlar: { year: 2000, value: 12.34 }
+        const labels = raw.map(r => r.year);
+        const values = raw.map(r => Number(r.value)); // taxmin: value = mlrd. USD
+
+        // Agar sizning Value to'liq dollarlarda bo'lsa (masalan 75,000,000,000)
+        // yo'nalish: scale = 1e-9; agar qiymatlar allaqachon mlrd bo'lsa scale = 1
+        let scale = 1; // => qiymat mlrd.USD bo'lsa 1, aks holda 1e-9 qo'ying
+        // Example: uncomment next line if Value is in full USD:
+        // scale = 1e-9;
+
+        const displayValues = values.map(v => v * scale);
+
+        // Yillik o'sish foizini hisoblash (YoY)
+        const yoy = displayValues.map((v, i) => {
+            if (i === 0) return null;
+            const prev = displayValues[i-1];
+            if (prev === 0 || prev === null) return null;
+            return ((v - prev) / Math.abs(prev)) * 100;
+        });
+
+        const ctx = document.getElementById('gdpChart').getContext('2d');
+
+        // Gradient area
+        const grad = ctx.createLinearGradient(0, 0, 0, 400);
+        grad.addColorStop(0, 'rgba(58,123,213,0.45)');
+        grad.addColorStop(0.6, 'rgba(58,123,213,0.18)');
+        grad.addColorStop(1, 'rgba(58,123,213,0)');
+
+        // Secondary gradient for line highlight (optional)
+        const growthColor = 'rgba(255,159,64,1)';
+
+        // Formatter helpers
+        const currencyFmt = new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 });
+        const percentFmt = value => (value === null ? '-' : value.toFixed(1) + '%');
+
+        const gdpChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        type: 'line',
+                        label: 'YaIM (mlrd USD)',
+                        data: displayValues,
+                        fill: true,
+                        backgroundColor: grad,
+                        borderColor: 'rgba(58,123,213,1)',
+                        borderWidth: 2.5,
+                        tension: 0.32,
+                        pointRadius: 4,
+                        pointHoverRadius: 7,
+                        pointBackgroundColor: '#fff',
+                        pointBorderColor: 'rgba(58,123,213,1)',
+                        yAxisID: 'y'
+                    },
+                    {
+                        type: 'line',
+                        label: 'YoY o‘sish (%)',
+                        data: yoy,
+                        borderColor: growthColor,
+                        backgroundColor: 'rgba(255,159,64,0.05)',
+                        borderWidth: 2,
+                        tension: 0.28,
+                        pointStyle: 'rectRounded',
+                        pointRadius: 4,
+                        pointHoverRadius: 7,
+                        yAxisID: 'y1'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: { mode: 'index', intersect: false },
+                stacked: false,
+                animation: {
+                    duration: 1300,
+                    easing: 'easeOutQuart'
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'YaIM (mlrd USD) va yilma-yil o‘sish (%)',
+                        font: { size: 16, weight: '600' }
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        backgroundColor: 'rgba(0,0,0,0.75)',
+                        titleFont: { size: 13, weight: '600' },
+                        bodyFont: { size: 13 },
+                        callbacks: {
+                            label: function(context) {
+                                const idx = context.dataIndex;
+                                const dsLabel = context.dataset.label || '';
+                                if (dsLabel.includes('YaIM')) {
+                                    const val = context.parsed.y;
+                                    return `${dsLabel}: ${currencyFmt.format(val)} mlrd $`;
+                                } else {
+                                    const val = context.parsed.y;
+                                    return `${dsLabel}: ${val === null ? '-' : val.toFixed(1) + '%'}`;
+                                }
+                            }
+                        }
+                    },
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            usePointStyle: true,
+                            boxWidth: 10,
+                            font: { size: 12 }
+                        }
+                    },
+                    zoom: undefined // optional: you can add chartjs-plugin-zoom if desired
+                },
+                scales: {
+                    x: {
+                        title: { display: true, text: 'Yil' },
+                        grid: { color: 'rgba(200,200,200,0.06)' }
+                    },
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        title: { display: true, text: 'YaIM (mlrd USD)' },
+                        ticks: {
+                            callback: function(value) {
+                                return currencyFmt.format(value);
+                            }
+                        },
+                        grid: { color: 'rgba(200,200,200,0.06)' }
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        title: { display: true, text: 'YoY o‘sish (%)' },
+                        ticks: {
+                            callback: function(value) {
+                                return value + '%';
+                            }
+                        },
+                        grid: { drawOnChartArea: false },
+                        suggestedMin: Math.min(...(yoy.filter(v => v !== null) || [])) - 2,
+                        suggestedMax: Math.max(...(yoy.filter(v => v !== null) || [])) + 2
+                    }
+                }
+            }
+        });
+
+    })();
+</script>

@@ -1,0 +1,46 @@
+﻿<h2>Students Balance Line Chart</h2>
+<canvas id="balanceChart" width="400" height="200"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    async function loadBalanceChart() {
+        const response = await fetch('/Student/Chart');
+        const students = await response.json();
+
+        const labels = students.map(s => s.FullName);
+        const balances = students.map(s => s.Balance);
+
+        const ctx = document.getElementById('balanceChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Balance',
+                    data: balances,
+                    fill: false,
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.3)',
+                    tension: 0.3,
+                    pointRadius: 5, 
+                    pointBackgroundColor: 'rgba(54, 162, 235, 1)'
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+    loadBalanceChart();
+</script>

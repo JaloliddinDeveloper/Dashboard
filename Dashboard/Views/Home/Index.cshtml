@@ -1,0 +1,524 @@
+﻿<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Asosiy Sahifa</title>
+    <style>
+        :root {
+            --bg: #0b0e14;
+            --bg-soft: #101522;
+            --card: #0f172a;
+            --text: #e5e7eb;
+            --muted: #9ca3af;
+            --brand: #7c3aed;
+            --brand-2: #22d3ee;
+            --ring: rgba(124,58,237,.35);
+            --radius: 16px;
+            --shadow: 0 10px 30px rgba(0,0,0,.35);
+            --glass: rgba(255,255,255,.06);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
+            background: radial-gradient(1200px 600px at 10% 10%, rgba(124,58,237,.18), transparent 40%), radial-gradient(1000px 500px at 90% 0%, rgba(34,211,238,.14), transparent 40%), linear-gradient(180deg, var(--bg), #0a0c13 60%);
+            color: var(--text);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+       
+
+        {
+            --bg: #f6f7fb;
+            --bg-soft: #eef0f7;
+            --card: #ffffff;
+            --text: #0b1220;
+            --muted: #5b6471;
+            --ring: rgba(124,58,237,.25);
+            --glass: rgba(0,0,0,.04);
+        }
+
+        body {
+            background: radial-gradient(1200px 600px at 10% 10%, rgba(124,58,237,.10), transparent 40%), radial-gradient(1000px 500px at 90% 0%, rgba(34,211,238,.10), transparent 40%), linear-gradient(180deg, var(--bg), #ffffff 60%);
+        }
+
+        }
+
+        .container {
+            width: min(1150px, 92%);
+            margin-inline: auto;
+        }
+
+        /* ====== Top Nav ====== */
+        .nav {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            backdrop-filter: saturate(150%) blur(10px);
+            background: linear-gradient(180deg, var(--glass), transparent);
+            border-bottom: 1px solid rgba(255,255,255,.06);
+        }
+
+            .nav .inner {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 14px 0;
+            }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            letter-spacing: .2px;
+        }
+
+        .badge {
+            display: inline-grid;
+            place-items: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--brand), var(--brand-2));
+            box-shadow: 0 8px 18px rgba(124,58,237,.35)
+        }
+
+        .brand span {
+            font-size: 1.05rem
+        }
+
+        .menu {
+            display: flex;
+            gap: 18px;
+        }
+
+            .menu a {
+                color: var(--text);
+                text-decoration: none;
+                font-size: .95rem;
+                padding: 8px 12px;
+                border-radius: 10px;
+                transition: all .2s
+            }
+
+                .menu a:hover {
+                    background: rgba(255,255,255,.06)
+                }
+
+        .cta {
+            padding: 9px 14px;
+            background: linear-gradient(135deg, var(--brand), var(--brand-2));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            box-shadow: 0 10px 20px var(--ring);
+            text-decoration: none
+        }
+
+        /* ====== Hero ====== */
+        .hero {
+            position: relative;
+            padding: 72px 0 48px;
+        }
+
+            .hero .grid {
+                display: grid;
+                grid-template-columns: 1.2fr 1fr;
+                gap: 36px;
+                align-items: center
+            }
+
+        .eyebrow {
+            display: inline-flex;
+            gap: 8px;
+            align-items: center;
+            padding: 6px 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(255,255,255,.12);
+            color: var(--muted);
+            font-size: .85rem;
+            background: var(--glass)
+        }
+
+            .eyebrow .dot {
+                width: 8px;
+                height: 8px;
+                border-radius: 999px;
+                background: linear-gradient(135deg, var(--brand), var(--brand-2))
+            }
+
+        .hero h1 {
+            margin-top: 14px;
+            font-size: clamp(2rem, 5vw, 3.2rem);
+            line-height: 1.1
+        }
+
+        .hero p {
+            margin-top: 14px;
+            color: var(--muted);
+            max-width: 56ch
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 22px
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            border-radius: 14px;
+            text-decoration: none;
+            font-weight: 600;
+            border: 1px solid rgba(255,255,255,.12);
+            background: var(--glass);
+            color: var(--text)
+        }
+
+            .btn.primary {
+                background: linear-gradient(135deg, var(--brand), var(--brand-2));
+                color: #fff;
+                border-color: transparent;
+                box-shadow: 0 10px 20px var(--ring)
+            }
+
+        /* Hero Card */
+        .hero-card {
+            background: var(--card);
+            border: 1px solid rgba(255,255,255,.08);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 22px;
+            position: relative;
+            overflow: hidden
+        }
+
+            .hero-card:before {
+                content: "";
+                position: absolute;
+                inset: -1px;
+                background: conic-gradient(from 180deg at 50% 50%, rgba(124,58,237,.18), rgba(34,211,238,.18), transparent 30%);
+                filter: blur(24px);
+                opacity: .55;
+                z-index: 0
+            }
+
+            .hero-card .kpi {
+                position: relative;
+                z-index: 1;
+                display: grid;
+                grid-template-columns: repeat(3,1fr);
+                gap: 12px
+            }
+
+        .metric {
+            padding: 16px;
+            border-radius: 14px;
+            background: rgba(255,255,255,.04);
+            border: 1px solid rgba(255,255,255,.08)
+        }
+
+            .metric b {
+                font-size: 1.35rem
+            }
+
+            .metric span {
+                display: block;
+                color: var(--muted);
+                font-size: .9rem;
+                margin-top: 4px
+            }
+
+        .section {
+            padding: 48px 0
+        }
+
+            .section .head {
+                display: flex;
+                align-items: end;
+                justify-content: space-between;
+                margin-bottom: 18px
+            }
+
+            .section h2 {
+                font-size: clamp(1.4rem, 3vw, 2rem)
+            }
+
+        .sub {
+            color: var(--muted)
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3,1fr);
+            gap: 18px
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid rgba(255,255,255,.08);
+            border-radius: var(--radius);
+            padding: 18px;
+            box-shadow: var(--shadow);
+            transition: transform .15s ease, box-shadow .15s ease, border-color .2s
+        }
+
+            .card:hover {
+                transform: translateY(-4px);
+                box-shadow: 0 16px 40px rgba(0,0,0,.45);
+                border-color: rgba(124,58,237,.35)
+            }
+
+            .card .icon {
+                width: 42px;
+                height: 42px;
+                border-radius: 12px;
+                background: linear-gradient(135deg, var(--brand), var(--brand-2));
+                display: grid;
+                place-items: center;
+                margin-bottom: 10px
+            }
+
+            .card h3 {
+                font-size: 1.05rem;
+                margin-bottom: 8px
+            }
+
+            .card p {
+                color: var(--muted);
+                font-size: .95rem
+            }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-top: 10px
+        }
+
+        .pill {
+            background: rgba(255,255,255,.04);
+            border: 1px solid rgba(255,255,255,.08);
+            border-radius: 999px;
+            padding: 12px 16px;
+            text-align: center
+        }
+
+            .pill b {
+                font-size: 1.1rem
+            }
+
+            .pill span {
+                display: block;
+                color: var(--muted);
+                font-size: .85rem
+            }
+
+        .cta-wrap {
+            background: linear-gradient(180deg, rgba(124,58,237,.10), rgba(34,211,238,.10));
+            border: 1px solid rgba(255,255,255,.10);
+            border-radius: calc(var(--radius) + 8px);
+            padding: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px
+        }
+
+            .cta-wrap p {
+                color: var(--muted)
+            }
+
+        footer {
+            padding: 26px 0;
+            color: var(--muted);
+            border-top: 1px solid rgba(255,255,255,.08);
+            margin-top: 36px
+        }
+
+        .media (max-width: 900px) {
+            .hero .grid
+
+        {
+            grid-template-columns: 1fr
+        }
+
+        .grid-3 {
+            grid-template-columns: 1fr 1fr
+        }
+
+        .stats {
+            grid-template-columns: 1fr 1fr
+        }
+
+        .nav .inner {
+            gap: 12px
+        }
+
+        .menu {
+            display: none
+        }
+
+        }
+        .media (max-width: 560px) {
+            .grid-3
+
+        {
+            grid-template-columns: 1fr
+        }
+
+        .stats {
+            grid-template-columns: 1fr
+        }
+
+        .hero-actions {
+            flex-direction: column
+        }
+
+        }
+
+
+        50% {
+            transform: translateY(-6px)
+        }
+
+        100% {
+            transform: translateY(0)
+        }
+
+        }
+
+        .badge {
+            animation: float 6s ease-in-out infinite
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <div class="container inner">
+            <div class="brand">
+                <div class="badge">📊</div>
+                <span>IqtisodiyStat</span>
+            </div>
+            <div class="menu">
+                <a asp-controller="Real" asp-action="UnemploymentView">Unempleyee</a>
+                <a asp-controller="Real" asp-action="TradeView">Trade</a>
+                <a asp-controller="Real" asp-action="SectorView">Sector</a>
+                <a asp-controller="Real" asp-action="InflationView">Infation</a>
+                <a asp-controller="Real" asp-action="GdpView">YAIM</a>
+                <a asp-controller="Real" asp-action="DemographyView">Demography</a>
+                <a asp-controller="Real" asp-action="CurrencyRateView">CurrencyRate</a>
+                <a asp-controller="Real" asp-action="BudgetView">Budget</a>
+                <a asp-controller="Real" asp-action="DemographyGenderView">DemographyGender</a>
+            </div>
+            <a class="cta" href="#boshlash">Boshlash</a>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="container grid">
+            <div>
+                <div class="eyebrow"><span class="dot"></span>Iqtisodiy va ijtimoiy ko‘rsatkichlar</div>
+                <h1>O‘zbekiston iqtisodiyoti raqamlar orqali</h1>
+                <p>YaIM, inflyatsiya, ishsizlik, demografiya va boshqa muhim ko‘rsatkichlarni tahlil qiling.</p>
+                <div class="hero-actions">
+                     <a class="btn primary" href="#boshlash">Boshlash</a>
+                     <a class="btn" href="#xususiyatlar">Ko‘proq ma’lumot</a>
+                </div>
+            </div>
+            <aside class="hero-card">
+                <div class="kpi">
+                    <div class="metric">
+                        <b>6.1%</b>
+                        <span>YaIM o‘sishi (2024)</span>
+                    </div>
+                    <div class="metric">
+                        <b>9.4%</b>
+                        <span>Inflyatsiya (2024)</span>
+                    </div>
+                    <div class="metric">
+                        <b>4.8%</b>
+                        <span>Ishsizlik darajasi</span>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </header>
+
+    <section id="xususiyatlar" class="section">
+        <div class="container">
+            <div class="head">
+                <div>
+                    <h2>Asosiy ko‘rsatkichlar</h2>
+                    <p class="sub">Iqtisodiy rivojlanishning muhim elementlari.</p>
+                </div>
+            </div>
+            <div class="grid-3">
+                <div class="card">
+                    <div class="icon">💰</div>
+                    <h3>YaIM</h3>
+                    <p>O‘zbekiston yalpi ichki mahsulot hajmining yillik o‘sishi.</p>
+                </div>
+                <div class="card">
+                    <div class="icon">📈</div>
+                    <h3>Inflyatsiya</h3>
+                    <p>Milliy valyutadagi narxlar o‘sishi darajasi.</p>
+                </div>
+                <div class="card">
+                    <div class="icon">👷</div>
+                    <h3>Ishsizlik</h3>
+                    <p>Bandlik va mehnat bozoridagi asosiy ko‘rsatkichlar.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="stat" class="section">
+        <div class="container">
+            <div class="head">
+                <h2>Qisqa Statistika</h2>
+                <p class="sub">O‘zbekiston iqtisodiy va ijtimoiy holatining soddalashtirilgan ko‘rinishi.</p>
+            </div>
+            <div class="stats">
+                <div class="pill"><b>36 mln</b><span>Aholi soni</span></div>
+                <div class="pill"><b>65%</b><span>Shahar aholisi</span></div>
+                <div class="pill"><b>$18 mlrd</b><span>Eksport hajmi</span></div>
+                <div class="pill"><b>$25 mlrd</b><span>Import hajmi</span></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container cta-wrap" id="boshlash">
+            <div>
+                <h3>Iqtisodiy tahlilni bugunoq boshlang</h3>
+                <p>Yalpi ichki mahsulot, byudjet xarajatlari, savdo balansi va boshqa ko‘rsatkichlarni real vaqt rejimida kuzating.</p>
+            </div>
+            <a class="cta" href="#boglanish">Ulanish</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container" id="boglanish">
+            <small>© 2025 IqtisodiyStat. Barcha huquqlar himoyalangan.</small>
+        </div>
+    </footer>
+</body>
+
+</html>
